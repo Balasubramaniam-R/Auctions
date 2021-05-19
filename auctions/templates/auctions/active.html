@@ -1,0 +1,53 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    {{is_active}}
+{% endblock %}
+
+{% block body %}
+
+{% if message %}
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+          <h5>{{message}}</h5>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+{% endif %}
+<div class="conatiner">
+  <div class="row mr-5 ml-1" style="float: right;">
+   <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     Categories
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      {% for category in categories%} 
+         <a class="dropdown-item" href="{% url 'auctions:Categories' category.id is_active %}">{{category.name}}</a>
+      {% endfor %}
+    </div>
+   </div>
+  </div>
+</div>
+<div class="container-fluid con-fluid mt-1">
+    <div class="row mb-3">
+        {% for item,cur_bid in items %}
+          <div class="card col-12 col-md-8 col-lg-3 mr-5 mb-3 p-1">
+            <img src="{{item.img}}" class="card-img-top p-1 pt-2" height="300px">
+            <div class="card-body d-flex flex-column">
+                <h4 class="card-title">{{item.title}}</h4>
+                <h5>Current Price: ${{cur_bid}}</h5>
+                <div class="py-2">
+                  <p class="card-text" style="font-size:medium;">{{item.description}}</p>
+                </div>
+                <div class="row mt-auto">
+                  <div class="col-12">
+                    <a href="{% url 'auctions:entry' item.id %}" class="btn btn-primary">View</a> 
+                  </div>
+                </div>               
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

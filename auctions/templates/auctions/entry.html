@@ -1,0 +1,104 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+  Item
+{% endblock %}
+
+{% block body %}
+      {% if message %}
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+          <h5>{{message}}</h5>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+          <h5>{{success}}</h5>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+     <div class="container">
+         <div class="row">
+             <div class="col-5 pr-2">
+                 <img src="{{item.img}}" alt="" height="400px" width="400px">
+             </div>
+             <div class="col-7">
+                 <h3>{{item.title}}</h3>
+                 {% ifequal  item.creator.id cur_bid.user.id %}
+                      <h4>Current price: ${{cur_bid.bid_price}} (No bids)</h4>
+                 {% else %}
+                       <h4>Current price: ${{cur_bid}}</h4>
+                 {% endifequal %} 
+                 <p>Category: {{item.category}}</p>
+                 <p>{{item}}</p>
+                 <p>{{item.description}}</p>
+                 {% if user.is_authenticated and item.is_active%} 
+                  {% ifequal user.id item.creator.id %}
+                   <a href="{% url 'auctions:close' item.id %}" class="btn btn-warning">Close</a>
+                  {% else %}
+                   <form action="{% url 'auctions:bid' item.id cur_bid.id %}" method="POST">
+                    {% csrf_token %}
+                     <div class="form-group row">
+                        <div class="input-group col-md-5">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">$</div>
+                            </div>
+                            <input class="form-control" type="number" name="bid" id="validationDeafult01" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Place bid</button>
+                     </div>
+                   </form>
+                  {% endifequal %}
+                 {% elif not item.is_active %}
+                    {% if user.is_authenticated %}
+                       {% ifequal user.id cur_bid.user.id %} 
+                          <div class="alert alert-success text-center" role="alert"><h3>Congarts You have won the auction</h3></div>
+                       {% endifequal  %}
+                    {% endif %}
+                    <h3>Closed</h3>
+                 {% endif %}
+
+                 {% if user.is_authenticated %}
+                  {% if not present %}
+                    <a href="{% url 'auctions:add_to_watch_list' item.id cur_bid.id %}" class="btn btn-primary">Add to Watch List</a>
+                  {% else %}
+                    <a href="{% url 'auctions:remove_from_watch_list' item.id cur_bid.id %}" class="btn btn-warning">Remove from Watch List</a>
+                  {% endif %}
+                 {% endif %}
+                 <h3 class="pt-2">Comments</h3>
+                 {% for comment in comments %}
+                    <div class="card mb-2">
+                       <h5 class="card-header">{{comment.user.username}}</h5>
+                       <div class="card-body">
+                          <p class="card-text">{{comment.comment}}</p>
+                       </div>
+                    </div>
+                 {% empty %}
+                     <h4 class="p-1">No comments</h4>
+                 {% endfor %}
+
+                 {% if user.is_authenticated %}
+                    <form action="{% url 'auctions:add_comment' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <textarea class="form-control" type="text" name="comment" rows="4" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary">Add comment</button>
+                            </div>
+                        </div>
+                    </form>
+                 {% else %}
+                    <h5 class="p-1">please login to add comments</h5>
+                 {% endif %}
+             </div>
+         </div>
+     </div>
+{% endblock %}

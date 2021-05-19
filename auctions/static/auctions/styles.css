@@ -1,0 +1,18 @@
+.container-fluid {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.con-fluid 
+{
+ padding-left: 100px;
+ padding-right: auto;
+}
+
+body {
+    margin: 0px;
+}
+
+.card {
+    border: 1px solid black;
+}

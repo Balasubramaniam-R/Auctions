@@ -1,0 +1,62 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+Create
+{% endblock %}
+
+{% block body %}
+<div class="container p-2">
+    <form action="{% url 'auctions:create' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group row ml-5">
+            <label for="validationDeafult01" class="col-md-2 pl-5">Title</label>
+            <div class="col-md-6">
+                <input class="form-control" type="text" name="title" id="validationDeafult01" required>
+            </div>
+        </div>
+        <div class="form-group row ml-5">
+            <label for="cat" class="col-md-2 pl-5">Category</label>
+            <div class="col-md-6">
+                <select class="custom-select" name="category" id="cat">
+                    <option value="">Choose...</option>
+                    <option value="Toy">Toy</option>
+                    <option vale="Home">Home</option>
+                    <option vale="Fashion">Fashion</option>
+                    <option vale="Electronic">Electronic</option>
+                    <option value="Automobile">Automobile</option>
+                    <option value="Sport">Sport</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row ml-5">
+            <label for="validationDeafult02" class="col-md-2 pl-5">Starting bid</label>
+            <div class="input-group col-md-6">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">$</div>
+                </div>
+                <input class="form-control" type="number" name="start_bid" id="validationDeafult02" required>
+            </div>
+        </div>
+
+        <div class="form-group row ml-5">
+            <label for="image" class="col-md-2 pl-5">Image URL</label>
+            <div class="col-md-6">
+                <input class="form-control" type="url" name="image_url" id="image">
+            </div>
+        </div>
+
+        <div class="form-group row ml-5">
+            <label for="validationDeafult03" class="col-md-2 pl-5">Description</label>
+            <div class="col-md-6">
+                <textarea class="form-control" type="text" name="description" id="validationDeafult03" rows="4"
+                    required></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row mr-md-4">
+            <div class="col-11 text-center">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+
+        {% endblock %}
